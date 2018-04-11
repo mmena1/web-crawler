@@ -1,9 +1,9 @@
 package org.demo.webcrawler;
 
-public class Entry {
+public class NewsEntry {
     private int numberOfOrder;
     private String title;
-    private int points;
+    private int score;
     private int commentsAmount;
 
     public int getNumberOfOrder() {
@@ -22,12 +22,12 @@ public class Entry {
         this.title = title;
     }
 
-    public int getPoints() {
-        return points;
+    public int getScore() {
+        return score;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
+    public void setScore(int score) {
+        this.score = score;
     }
 
     public int getCommentsAmount() {

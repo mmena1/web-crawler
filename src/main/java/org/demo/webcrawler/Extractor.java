@@ -4,48 +4,65 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Extractor {
 
-//    private static final String URL = "https://news.ycombinator.com/";
+    private static final Extractor INSTANCE = new Extractor();
 
-    public HashSet<Entry> getItemList(Document document) {
-        HashSet<Entry> entries = new HashSet<>();
+    private Extractor() {}
+
+    //    private static final String URL = "https://news.ycombinator.com/";
+
+    public Map<Integer, NewsEntry> getItemList(Document document) {
+        Map<Integer, NewsEntry> entries = new HashMap<>();
 //        try {
 //            Document document = Jsoup.connect(URL).get();
         Element tbody = document.selectFirst("table.itemlist > tbody");
         Elements elements = tbody.children();
         int i = 0;
         Element element = elements.first();
-        Entry entry = new Entry();
         while (i < 30 && element != null) {
-
-            if (element.hasClass("athing")) {
-                Element rank = element.selectFirst(".rank");
-                entry.setNumberOfOrder(Integer.parseInt(rank.text().substring(0, rank.text().length() - 1)));
-
-                Element title = element.selectFirst(".storylink");
-                entry.setTitle(title.text());
-
-                element = element.nextElementSibling();
-
-                Element score = element.selectFirst(".score");
-                entry.setNumberOfOrder(Integer.parseInt(score.text().substring(0, score.text().indexOf("point") - 1)));
-
-                Element comments = element.selectFirst("a[href^=\"item\"]");
-                entry.setCommentsAmount(Integer.parseInt(comments.text().substring(0, score.text().indexOf("comment") - 1)));
-
-                entries.add(entry);
+            NewsEntry newsEntry = createEntry(element);
+            if (newsEntry != null) {
                 i++;
+                entries.put(newsEntry.getNumberOfOrder(), newsEntry);
             }
             element = element.nextElementSibling();
-
         }
         return entries;
 
 //        } catch (IOException e) {
 //            throw new WebCrawlerException("Can't connect to the URL: " + URL + ". Please make sure you have an active internet connection.");
 //        }
+    }
+
+    private NewsEntry createEntry(Element element) {
+        NewsEntry newsEntry = new NewsEntry();
+        if (element.hasClass("athing")) {
+            Element rank = element.selectFirst(".rank");
+            newsEntry.setNumberOfOrder(Integer.parseInt(rank.text().substring(0, rank.text().length() - 1)));
+
+            Element title = element.selectFirst(".storylink");
+            newsEntry.setTitle(title.text());
+
+            element = element.nextElementSibling();
+
+            Element score = element.selectFirst(".score");
+            newsEntry.setScore(Integer.parseInt(score.text().substring(0, score.text().indexOf("point") - 1)));
+
+            Element comments = element.selectFirst(".subtext > a[href^=\"item\"]");
+            if (comments.text().contains("comment")) {
+                newsEntry.setCommentsAmount(Integer.parseInt(comments.text().substring(0, comments.text().indexOf("comment") - 1)));
+            }
+
+            return newsEntry;
+        }
+        return null;
+    }
+
+    public static Extractor getINSTANCE() {
+        return INSTANCE;
     }
 }
