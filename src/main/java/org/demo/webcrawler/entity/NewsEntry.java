@@ -1,10 +1,23 @@
-package org.demo.webcrawler;
+package org.demo.webcrawler.entity;
 
 public class NewsEntry {
     private int numberOfOrder;
     private String title;
     private int score;
     private int commentsAmount;
+
+    public NewsEntry(int numberOfOrder,
+                     String title,
+                     int score,
+                     int commentsAmount) {
+        this.numberOfOrder = numberOfOrder;
+        this.title = title;
+        this.score = score;
+        this.commentsAmount = commentsAmount;
+    }
+
+    public NewsEntry() {
+    }
 
     public int getNumberOfOrder() {
         return numberOfOrder;

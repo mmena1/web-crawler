@@ -1,24 +1,26 @@
-package org.demo.webcrawler;
+package org.demo.webcrawler.service;
 
+import org.demo.webcrawler.entity.NewsEntry;
+import org.demo.webcrawler.exception.WebCrawlerException;
+import org.demo.webcrawler.util.JsoupWrapper;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class Extractor {
+@Service
+public class Scraper {
 
-    private static final Extractor INSTANCE = new Extractor();
+    @Autowired
+    private JsoupWrapper jsoupWrapper;
 
-    private Extractor() {}
-
-    //    private static final String URL = "https://news.ycombinator.com/";
-
-    public Map<Integer, NewsEntry> getItemList(Document document) {
+    public Map<Integer, NewsEntry> getItemList() throws WebCrawlerException {
+        Document document = jsoupWrapper.connect();
         Map<Integer, NewsEntry> entries = new HashMap<>();
-//        try {
-//            Document document = Jsoup.connect(URL).get();
         Element tbody = document.selectFirst("table.itemlist > tbody");
         Elements elements = tbody.children();
         int i = 0;
@@ -33,9 +35,6 @@ public class Extractor {
         }
         return entries;
 
-//        } catch (IOException e) {
-//            throw new WebCrawlerException("Can't connect to the URL: " + URL + ". Please make sure you have an active internet connection.");
-//        }
     }
 
     private NewsEntry createEntry(Element element) {
@@ -60,9 +59,5 @@ public class Extractor {
             return newsEntry;
         }
         return null;
-    }
-
-    public static Extractor getINSTANCE() {
-        return INSTANCE;
     }
 }
