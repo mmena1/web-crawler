@@ -1,11 +1,9 @@
 package org.demo.webcrawler.service;
 
 
-import org.demo.webcrawler.WebCrawlerTest;
 import org.demo.webcrawler.entity.NewsEntry;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -16,11 +14,11 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class FilterServiceTest extends WebCrawlerTest {
+public class FilterServiceTest {
 
     @Autowired
     private FilterService filterService;

@@ -49,10 +49,12 @@ public class Scraper {
             element = element.nextElementSibling();
 
             Element score = element.selectFirst(".score");
-            newsEntry.setScore(Integer.parseInt(score.text().substring(0, score.text().indexOf("point") - 1)));
+            if (score != null) {
+                newsEntry.setScore(Integer.parseInt(score.text().substring(0, score.text().indexOf("point") - 1)));
+            }
 
             Element comments = element.selectFirst(".subtext > a[href^=\"item\"]");
-            if (comments.text().contains("comment")) {
+            if (comments != null && comments.text().contains("comment")) {
                 newsEntry.setCommentsAmount(Integer.parseInt(comments.text().substring(0, comments.text().indexOf("comment") - 1)));
             }
 

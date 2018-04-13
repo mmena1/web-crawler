@@ -1,31 +1,47 @@
-package org.demo.webcrawler.scraping;
+package org.demo.webcrawler.service;
 
-import org.demo.webcrawler.WebCrawlerTest;
 import org.demo.webcrawler.entity.NewsEntry;
 import org.demo.webcrawler.service.Scraper;
 import org.demo.webcrawler.util.JsoupWrapper;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.io.File;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ScraperTest extends WebCrawlerTest {
+public class ScraperTest {
 
     @Autowired
     private Scraper scraper;
 
     @MockBean
     private JsoupWrapper jsoupWrapper;
+
+    private Document document;
+
+    @Before
+    public void setUp() {
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            File input = new File(classLoader.getResource("scenario1.html").getFile());
+            document = Jsoup.parse(input, "UTF-8");
+        } catch (Exception e) {
+            Assert.fail(e.getMessage());
+        }
+    }
 
     @Test
     public void shouldExtract30Entries() throws Exception {

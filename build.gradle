@@ -22,7 +22,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 bootJar {
-    baseName = 'web-crawler-hateoas'
+    baseName = 'web-crawler'
     version =  '0.1.0'
 }
 

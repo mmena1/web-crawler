@@ -1,8 +1,6 @@
 package org.demo.webcrawler.rest;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.demo.webcrawler.WebCrawlerTest;
 import org.demo.webcrawler.entity.NewsEntry;
 import org.demo.webcrawler.service.FilterService;
 import org.demo.webcrawler.service.Scraper;
@@ -16,7 +14,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -25,7 +25,7 @@ import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class NewsEntryControllerTest extends WebCrawlerTest {
+public class NewsEntryControllerTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -70,28 +70,35 @@ public class NewsEntryControllerTest extends WebCrawlerTest {
     public void shouldReturnOnlyEntriesWithMoreThanFiveWords() throws Exception {
 
         // given
-        Map<Integer, NewsEntry> itemList = new HashMap<>();
-        itemList.put(1, new NewsEntry(1, "Title With More than five words 1", 21, 44));
-        itemList.put(2, new NewsEntry(2, "Less than five words", 5, 30));
-        itemList.put(3, new NewsEntry(3, "Title 3", 105, 12));
-        itemList.put(4, new NewsEntry(4, "Title With More than five words 2", 145, 102));
-        itemList.put(5, new NewsEntry(5, "Title With More than five words 3", 69, 35));
-        String jsonResult = objectMapper.writeValueAsString(itemList.values());
-
-        Map<Integer, NewsEntry> filteredMap = new HashMap<>();
-        filteredMap.put(4, new NewsEntry(4, "Title With More than five words 2", 145, 102));
-        filteredMap.put(1, new NewsEntry(1, "Title With More than five words 1", 21, 44));
-        filteredMap.put(5, new NewsEntry(5, "Title With More than five words 3", 69, 35));
-        String jsonFilteredResult = objectMapper.writeValueAsString(filteredMap.values());
-        given(scraper.getItemList()).willReturn(itemList);
+        List<NewsEntry> filteredList = new ArrayList<>();
+        filteredList.add(new NewsEntry(4, "Title With More than five words 2", 145, 102));
+        String jsonResult = objectMapper.writeValueAsString(filteredList);
+        given(filterService.filterEntriesWithMoreThanFiveWords()).willReturn(filteredList);
 
         // when
         ResponseEntity<String> response = restTemplate.getForEntity(createURLWithPort("/entries/filterMoreThanFiveWords"), String.class);
         NewsEntry[] newsEntries = objectMapper.readValue(response.getBody(), NewsEntry[].class);
 
         // then
-        assertThat(newsEntries.length).isEqualTo(3);
-        assertThat(response.getBody()).isNotEqualTo(jsonResult);
-        assertThat(response.getBody()).isEqualTo(jsonFilteredResult);
+        assertThat(newsEntries.length).isEqualTo(1);
+        assertThat(response.getBody()).isEqualTo(jsonResult);
+    }
+
+    @Test
+    public void shouldReturnEntriesWithLessThanSixWords() throws Exception {
+
+        // given
+        List<NewsEntry> filteredList = new ArrayList<>();
+        filteredList.add(new NewsEntry(4, "Title With More than five words 2", 145, 102));
+        String jsonResult = objectMapper.writeValueAsString(filteredList);
+        given(filterService.filterEntriesWithLessThanOrEqualToFiveWords()).willReturn(filteredList);
+
+        // when
+        ResponseEntity<String> response = restTemplate.getForEntity(createURLWithPort("/entries/filterLessThanSixWords"), String.class);
+        NewsEntry[] newsEntries = objectMapper.readValue(response.getBody(), NewsEntry[].class);
+
+        // then
+        assertThat(newsEntries.length).isEqualTo(1);
+        assertThat(response.getBody()).isEqualTo(jsonResult);
     }
 }
