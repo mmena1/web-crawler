@@ -1,5 +1,10 @@
 package org.demo.webcrawler.entity;
 
+/**
+ * Entity representing a news entry from the provided web site
+ *
+ * @author martin
+ */
 public class NewsEntry {
     private int numberOfOrder;
     private String title;

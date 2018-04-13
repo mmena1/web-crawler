@@ -16,6 +16,11 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+/**
+ * Tests the correct behaviour of the {@link FilterService} service.
+ *
+ * @author martin
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class FilterServiceTest {

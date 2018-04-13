@@ -1,7 +1,6 @@
 package org.demo.webcrawler.service;
 
 import org.demo.webcrawler.entity.NewsEntry;
-import org.demo.webcrawler.service.Scraper;
 import org.demo.webcrawler.util.JsoupWrapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -20,6 +19,11 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
+/**
+ * Tests the correct behaviour of the {@link Scraper} class.
+ *
+ * @author martin
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ScraperTest {

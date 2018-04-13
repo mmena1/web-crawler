@@ -13,6 +13,11 @@ import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Abstract class for integration tests of the scenarios
+ *
+ * @author martin
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class ScenarioIT {
 
@@ -30,10 +35,23 @@ public abstract class ScenarioIT {
     @MockBean
     protected JsoupWrapper jsoupWrapper;
 
+    /**
+     * Creates the url in which to test the RESTful API
+     *
+     * @param uri An endpoint of the API
+     * @return the url to test the API
+     */
     protected String createURLWithPort(String uri) {
         return "http://localhost:" + port + "/web-crawler" + uri;
     }
 
+    /**
+     * Tests the response of filtering entries with more than five words in their title, is correctly filtered and ordered
+     *
+     * @param orderedComments Ordered array with the amount of comments of each entry that should be validated
+     * @param totalFiltered   the total number of filtered entries
+     * @throws Exception in case something goes wrong
+     */
     protected void filterEntriesWithMoreThanFiveWords(int[] orderedComments, int totalFiltered) throws Exception {
         // given
         int i = 0;
@@ -51,6 +69,13 @@ public abstract class ScenarioIT {
         }
     }
 
+    /**
+     * Tests the response of filtering entries with five or less words in their title, is correctly filtered and ordered
+     *
+     * @param orderedScore  Ordered array with the score of each entry that should be validated
+     * @param totalFiltered the total number of filtered entries
+     * @throws Exception in case something goes wrong
+     */
     protected void filterEntriesWithLessThanSixWords(int[] orderedScore, int totalFiltered) throws Exception {
 
         // given

@@ -8,12 +8,24 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
+/**
+ * Wrapper class for connecting the Jsoup library to the URL defined in application.yml.
+ * The main purpose of this class is to facilitate the tests so that the connect() method can be mocked.
+ *
+ * @author martin
+ */
 @Service
 public class JsoupWrapper {
 
     @Value("${url.news-entries}")
     private String newsUrl;
 
+    /**
+     * Returns a {@link Document} object which represents the content of the URL defined in application.yml.
+     *
+     * @return a Document object
+     * @throws WebCrawlerException in case there is connection issues
+     */
     public Document connect() throws WebCrawlerException {
         try {
             return Jsoup.connect(newsUrl).get();

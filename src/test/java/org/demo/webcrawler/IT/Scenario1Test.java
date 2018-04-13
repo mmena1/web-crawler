@@ -11,6 +11,11 @@ import java.io.File;
 
 import static org.mockito.BDDMockito.given;
 
+/**
+ * Scenario 1 for integration tests
+ *
+ * @author martin
+ */
 @RunWith(SpringRunner.class)
 public class Scenario1Test extends ScenarioIT {
 

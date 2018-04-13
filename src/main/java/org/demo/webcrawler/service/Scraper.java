@@ -12,12 +12,23 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Class for scraping the first 30 or less entries of the provided website
+ *
+ * @author martin
+ */
 @Service
 public class Scraper {
 
     @Autowired
     private JsoupWrapper jsoupWrapper;
 
+    /**
+     * Returns a Map of the first 30 or less entries found in the website
+     *
+     * @return a Map of the scraped entries
+     * @throws WebCrawlerException in case there is connection issues
+     */
     public Map<Integer, NewsEntry> getItemList() throws WebCrawlerException {
         Document document = jsoupWrapper.connect();
         Map<Integer, NewsEntry> entries = new HashMap<>();
@@ -37,6 +48,13 @@ public class Scraper {
 
     }
 
+    /**
+     * Creates a {@link NewsEntry} object from the html element with class="athing" and the next sibling element which has no class,
+     * but it contains the score and comments amount for the entry
+     *
+     * @param element Html element to be processed
+     * @return a NewsEntry element from element argument if it has class="athing", null otherwise.
+     */
     private NewsEntry createEntry(Element element) {
         NewsEntry newsEntry = new NewsEntry();
         if (element.hasClass("athing")) {

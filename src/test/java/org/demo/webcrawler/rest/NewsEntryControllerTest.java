@@ -23,6 +23,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 
+/**
+ * Tests the correct behaviour of the {@link NewsEntryController} controller.
+ *
+ * @author martin
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class NewsEntryControllerTest {
@@ -42,6 +47,12 @@ public class NewsEntryControllerTest {
     @MockBean
     private Scraper scraper;
 
+    /**
+     * Creates the url in which to test the RESTful API
+     *
+     * @param uri An endpoint of the API
+     * @return the url to test the API
+     */
     private String createURLWithPort(String uri) {
         return "http://localhost:" + port + "/web-crawler" + uri;
     }
